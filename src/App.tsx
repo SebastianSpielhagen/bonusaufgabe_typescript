@@ -28,10 +28,58 @@ function App() {
             console.log();
         }
 
+        durchschnittsnote_berechnen(): number {
+            let summe = 0;
+            let anzahlNoten = 0;
+
+            for (const fach in this.noten) {
+                for (const note of this.noten[fach]) {
+                    if (typeof note === "number") {
+                        summe += note;
+                        anzahlNoten++;
+                    }
+                }
+            }
+
+            if (anzahlNoten === 0) {
+                return 0;
+            }
+
+            return summe / anzahlNoten;
+        }
+
         static schueler_liste_ausgeben(schuelerListe: Schueler[]): void {
             for (const schueler of schuelerListe) {
                 schueler.noten_ausgeben();
+                const durchschnittsnote = schueler.durchschnittsnote_berechnen();
+                console.log(`Durchschnittsnote: ${durchschnittsnote.toFixed(2)}`);
+                console.log();
             }
+
+            const gesamtDurchschnittsnote = Schueler.gesamt_durchschnittsnote_berechnen(schuelerListe);
+            console.log(`Gesamtdurchschnittsnote: ${gesamtDurchschnittsnote.toFixed(2)}`);
+        }
+
+        static gesamt_durchschnittsnote_berechnen(schuelerListe: Schueler[]): number {
+            let summe = 0;
+            let anzahlNoten = 0;
+
+            for (const schueler of schuelerListe) {
+                for (const fach in schueler.noten) {
+                    for (const note of schueler.noten[fach]) {
+                        if (typeof note === "number") {
+                            summe += note;
+                            anzahlNoten++;
+                        }
+                    }
+                }
+            }
+
+            if (anzahlNoten === 0) {
+                return 0;
+            }
+
+            return summe / anzahlNoten;
         }
     }
 
